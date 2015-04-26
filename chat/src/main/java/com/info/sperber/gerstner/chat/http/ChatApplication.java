@@ -54,8 +54,8 @@ public class ChatApplication extends Application {
         router.setDefaultMatchingMode(Template.MODE_STARTS_WITH);
         router.attach("/chat", authenticatior);
         // no need to authenticate here
-        router.attach("/server", ServerConnectResource.class);
-        router.attach("/blubb", ServerMessageResource.class);
+        router.attach("/serverconnect", ServerConnectResource.class);
+        router.attach("/synchronize", ServerMessageResource.class);
         
         return router;
     }
@@ -69,7 +69,7 @@ public class ChatApplication extends Application {
     }
 
 	public void connectToServer(Server server) {
-		String url = server.getAddress() + "/rest/server";
+		String url = server.getAddress() + "/rest/serverconnect";
 		ClientResource resource = AuthenticationHelper.createResource(url);
 		 
 		GsonRepresentation<Server> rep = GsonUtil.getRepresentationFromServer(this.server);
@@ -111,7 +111,7 @@ public class ChatApplication extends Application {
 	public void sendConnectionToConnectedServers(Server server) {
 		for (Server s : connectedServers){
 			if (server != s){
-				String url = server.getAddress() + "/rest/server";
+				String url = server.getAddress() + "/rest/serverconnect";
 				ClientResource client = AuthenticationHelper.createResource(url);
 				GsonRepresentation<Server> rep = GsonUtil.getRepresentationFromServer(server);
 				client.post(rep);
@@ -123,7 +123,7 @@ public class ChatApplication extends Application {
 		Thread t = new Thread(){
             @Override
             public void run(){
-            	String url = server.getAddress() + "/rest/blubb";
+            	String url = server.getAddress() + "/rest/synchronize";
             	ClientResource client = new ClientResource(url);
         		
         		// get Messages from other server and persist

@@ -59,7 +59,7 @@ public class ChatServerResource extends ServerResource{
             	LinkedList<Message> msgList = new LinkedList<Message>();
             	msgList.add(message);
             	for (Server server : connectedServers){
-            		String url = server.getAddress() + "/rest/blubb";
+            		String url = server.getAddress() + "/rest/synchronize";
             		ClientResource client = AuthenticationHelper.createResource(url);
             		GsonRepresentation<LinkedList<Message>> rep = new GsonRepresentation<LinkedList<Message>>(msgList);
             		client.post(rep);
